@@ -2,7 +2,7 @@
   --lgmp-card-width: 920px;
   --lgmp-card-radius: 38px;
   --lgmp-card-bg: rgba(255, 255, 255, 0.075);
-  --lgmp-card-tint: rgba(8, 7, 12, 0.18);
+  --lgmp-card-tint: rgba(8, 7, 12, 0.11);
   --lgmp-card-bg-fallback: rgba(31, 29, 37, 0.54);
   --lgmp-border: rgba(255, 255, 255, 0.34);
   --lgmp-border-bright: rgba(255, 255, 255, 0.5);
@@ -13,7 +13,16 @@
   --lgmp-shadow: 0 34px 88px rgba(0, 0, 0, 0.46), 0 1px 0 rgba(255, 255, 255, 0.18) inset;
 }
 
+.lgmp-filterDefs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
 .lgmp-stage {
+  position: relative;
+  isolation: isolate;
   display: grid;
   place-items: center;
   min-height: 560px;
@@ -31,8 +40,8 @@
   border-radius: var(--lgmp-card-radius);
   background: var(--lgmp-card-bg);
   box-shadow: var(--lgmp-shadow);
-  backdrop-filter: blur(34px) saturate(1.55) brightness(1.08);
-  -webkit-backdrop-filter: blur(34px) saturate(1.55) brightness(1.08);
+  backdrop-filter: blur(28px) contrast(82%) saturate(145%) brightness(1.08);
+  -webkit-backdrop-filter: blur(28px) contrast(82%) saturate(145%) brightness(1.08);
 }
 
 .lgmp-card::before,
@@ -50,7 +59,7 @@
     radial-gradient(ellipse at 86% 88%, rgba(255, 255, 255, 0.12), transparent 34%),
     linear-gradient(135deg, rgba(255, 255, 255, 0.13), transparent 38%, rgba(0, 0, 0, 0.2));
   filter: blur(12px);
-  opacity: 0.64;
+  opacity: 0.48;
 }
 
 .lgmp-card::after {
@@ -72,16 +81,36 @@
     linear-gradient(135deg, rgba(255, 255, 255, 0.14), transparent 40%, rgba(0, 0, 0, 0.16)),
     var(--lgmp-card-tint);
   box-shadow:
-    inset 0 1px 0 var(--lgmp-border-bright),
+    inset 10px 10px 24px rgba(200, 222, 255, 0.13),
+    inset 2px 2px 7px rgba(255, 255, 255, 0.34),
+    inset -12px -12px 26px rgba(235, 255, 210, 0.1),
+    inset -2px -2px 34px rgba(255, 255, 255, 0.18),
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    inset 0 -36px 70px rgba(0, 0, 0, 0.16);
-  backdrop-filter: blur(18px) saturate(1.25);
-  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+    inset 0 -36px 70px rgba(0, 0, 0, 0.14);
+  backdrop-filter: blur(20px) contrast(80%) saturate(135%) brightness(1.08);
+  -webkit-backdrop-filter: blur(20px) contrast(80%) saturate(135%) brightness(1.08);
+}
+
+.lgmp-refractLayer {
+  position: absolute;
+  inset: -12px;
+  z-index: 1;
+  border-radius: calc(var(--lgmp-card-radius) + 8px);
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 36%, rgba(255, 255, 255, 0.04)),
+    radial-gradient(ellipse at 9% 50%, rgba(255, 255, 255, 0.14), transparent 20%),
+    radial-gradient(ellipse at 94% 48%, rgba(255, 255, 255, 0.1), transparent 18%);
+  opacity: 0.68;
+  backdrop-filter: blur(6px) contrast(78%) saturate(160%);
+  -webkit-backdrop-filter: blur(6px) contrast(78%) saturate(160%);
+  filter: url("#lgmp-liquid-refraction");
+  mix-blend-mode: screen;
 }
 
 .lgmp-content {
   position: relative;
-  z-index: 2;
+  z-index: 3;
   display: grid;
   grid-template-columns: 168px minmax(0, 1fr);
   grid-template-areas:
@@ -269,6 +298,17 @@
   .lgmp-cardSurface {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
+  }
+
+  .lgmp-refractLayer {
+    opacity: 0.22;
+    filter: none;
+  }
+}
+
+@supports not (filter: url("#lgmp-liquid-refraction")) {
+  .lgmp-refractLayer {
+    filter: none;
   }
 }
 
