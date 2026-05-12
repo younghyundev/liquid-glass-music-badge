@@ -1,5 +1,6 @@
 {
   "name": "liquid-glass-music-player",
+  "description": "A README-embeddable liquid glass music badge generated from YouTube links.",
   "version": "0.1.0",
   "private": true,
   "type": "module",
