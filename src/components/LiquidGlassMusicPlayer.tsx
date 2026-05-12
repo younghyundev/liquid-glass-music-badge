@@ -1,12 +1,22 @@
-import React from "react";
+"use client";
+
 import LiquidGlass from "liquid-glass-react";
+
+type LiquidGlassMusicPlayerProps = {
+  title?: string;
+  artist?: string;
+  currentTime?: string;
+  remainingTime?: string;
+  progress?: number;
+  albumArtUrl?: string;
+};
 
 const iconProps = {
   viewBox: "0 0 64 64",
   fill: "none",
   xmlns: "http://www.w3.org/2000/svg",
-  "aria-hidden": "true",
-  focusable: "false"
+  "aria-hidden": true,
+  focusable: false
 };
 
 function ShuffleIcon() {
@@ -73,7 +83,7 @@ export default function LiquidGlassMusicPlayer({
   remainingTime = "-1:40",
   progress = 42,
   albumArtUrl = ""
-}) {
+}: LiquidGlassMusicPlayerProps) {
   const boundedProgress = Math.min(100, Math.max(0, Number(progress) || 0));
 
   return (

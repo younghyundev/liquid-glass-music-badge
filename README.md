@@ -1,6 +1,7 @@
 # Liquid Glass Music Badge
 
-A README-embeddable liquid glass music badge generated from YouTube links.
+A README-embeddable liquid glass music badge generated from YouTube links. Built
+with Next.js, React, and TypeScript for straightforward Vercel deployment.
 
 The project serves a static SVG at `/player.svg`. Pass a YouTube URL, and the
 badge uses the video's thumbnail as the album cover. It also shows the fetched
@@ -23,6 +24,7 @@ so it works cleanly as a GitHub README `<img>` embed.
 - Liquid glass style card with embedded control assets
 - Local React preview of the liquid glass player
 - In-page tester that generates the final README `<img>` tag
+- Next.js route handlers for Vercel-friendly deployment
 
 ## Local Development
 
@@ -33,6 +35,13 @@ npm run dev
 
 Open `http://localhost:3000` to preview the React player and test README SVG
 generation from a YouTube link.
+
+For a production check:
+
+```bash
+npm run build
+npm run start
+```
 
 ## URL Parameters
 
