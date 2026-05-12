@@ -14,8 +14,11 @@ const contentTypes = {
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
   ".svg": "image/svg+xml; charset=utf-8",
-  ".json": "application/json; charset=utf-8"
+  ".json": "application/json; charset=utf-8",
+  ".png": "image/png"
 };
+
+const controlAssetsPromise = loadControlAssets();
 
 export async function handleRequest(request, response) {
   const currentUrl = new URL(request.url, `http://${request.headers.host || "localhost"}`);
@@ -34,7 +37,7 @@ export async function handleRequest(request, response) {
       "content-type": contentTypes[".svg"],
       "cache-control": "public, max-age=3600, stale-while-revalidate=86400"
     });
-    response.end(renderPlayerSvg(metadata));
+    response.end(renderPlayerSvg(metadata, { controls: await controlAssetsPromise }));
     return;
   }
 
@@ -75,9 +78,20 @@ export async function handleRequest(request, response) {
   }
 }
 
+async function loadControlAssets() {
+  const names = ["shuffle", "previous", "pause", "next", "repeat"];
+  const entries = await Promise.all(
+    names.map(async (name) => {
+      const data = await readFile(join(publicRoot, "assets", "controls", `${name}.png`));
+      return [name, `data:image/png;base64,${data.toString("base64")}`];
+    })
+  );
+
+  return Object.fromEntries(entries);
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   createServer(handleRequest).listen(port, () => {
     console.log(`Liquid Glass Music Player listening on http://localhost:${port}`);
   });
 }
-

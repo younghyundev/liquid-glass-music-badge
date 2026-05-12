@@ -1,6 +1,6 @@
 import { thumbnailUrl } from "./youtube.js";
 
-export function renderPlayerSvg(metadata) {
+export function renderPlayerSvg(metadata, options = {}) {
   const videoId = metadata.videoId;
   const cover = metadata.thumbnail || thumbnailUrl(videoId) || "";
   const title = truncate(metadata.title || "YouTube Track", 44);
@@ -8,6 +8,14 @@ export function renderPlayerSvg(metadata) {
   const accent = chooseAccent(videoId || title);
   const darkAccent = shade(accent, -36);
   const lightAccent = shade(accent, 52);
+  const controls = {
+    shuffle: "/assets/controls/shuffle.png",
+    previous: "/assets/controls/previous.png",
+    pause: "/assets/controls/pause.png",
+    next: "/assets/controls/next.png",
+    repeat: "/assets/controls/repeat.png",
+    ...(options.controls || {})
+  };
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="860" height="320" viewBox="0 0 860 320" role="img" aria-label="${xmlAttr(title)} by ${xmlAttr(artist)}">
@@ -82,13 +90,18 @@ export function renderPlayerSvg(metadata) {
   <text x="340" y="112" class="title">${xmlText(title)}</text>
   <text x="340" y="148" class="artist">${xmlText(artist)}</text>
 
-  <g transform="translate(340 171)">
-    <rect x="0" y="0" width="44" height="44" rx="22" fill="#ffffff" opacity=".48" class="glassStroke"/>
-    <path d="M18 14l15 8-15 8z" fill="${xmlAttr(darkAccent)}"/>
-    <rect class="bar" x="58" y="15" width="6" height="24" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".86"/>
-    <rect class="bar" x="71" y="9" width="6" height="30" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".72"/>
-    <rect class="bar" x="84" y="18" width="6" height="21" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".62"/>
-    <rect class="bar" x="97" y="5" width="6" height="34" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".8"/>
+  <g transform="translate(340 169)" opacity=".9">
+    <rect x="-15" y="-12" width="276" height="70" rx="35" fill="#ffffff" opacity=".25" class="glassStroke"/>
+    <image href="${xmlAttr(controls.shuffle)}" x="5" y="13" width="31" height="24" preserveAspectRatio="xMidYMid meet" opacity=".58"/>
+    <image href="${xmlAttr(controls.previous)}" x="57" y="5" width="38" height="40" preserveAspectRatio="xMidYMid meet" opacity=".82"/>
+    <circle cx="135" cy="25" r="32" fill="#ffffff" opacity=".52" class="glassStroke pulse"/>
+    <image href="${xmlAttr(controls.pause)}" x="116" y="3" width="38" height="44" preserveAspectRatio="xMidYMid meet" opacity=".94"/>
+    <image href="${xmlAttr(controls.next)}" x="177" y="5" width="38" height="40" preserveAspectRatio="xMidYMid meet" opacity=".82"/>
+    <image href="${xmlAttr(controls.repeat)}" x="235" y="13" width="32" height="24" preserveAspectRatio="xMidYMid meet" opacity=".58"/>
+    <rect class="bar" x="294" y="16" width="6" height="24" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".86"/>
+    <rect class="bar" x="307" y="10" width="6" height="30" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".72"/>
+    <rect class="bar" x="320" y="19" width="6" height="21" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".62"/>
+    <rect class="bar" x="333" y="6" width="6" height="34" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".8"/>
   </g>
 
   <rect x="340" y="223" width="328" height="10" rx="5" fill="#ffffff" opacity=".44"/>
