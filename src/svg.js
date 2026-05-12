@@ -3,7 +3,7 @@ import { thumbnailUrl } from "./youtube.js";
 export function renderPlayerSvg(metadata, options = {}) {
   const videoId = metadata.videoId;
   const cover = metadata.thumbnail || thumbnailUrl(videoId) || "";
-  const title = truncate(metadata.title || "Birds of a Feather", 32);
+  const title = truncate(metadata.title || "Birds of a Feather", 92);
   const artist = truncate(metadata.artist || "Billie Eilish", 28);
   const controls = {
     shuffle: "/assets/controls/shuffle.png",
@@ -51,6 +51,9 @@ export function renderPlayerSvg(metadata, options = {}) {
     <clipPath id="coverClip">
       <rect x="38" y="56" width="168" height="168" rx="20"/>
     </clipPath>
+    <clipPath id="titleClip">
+      <rect x="236" y="66" width="622" height="64"/>
+    </clipPath>
     <style>
       .title { font: 730 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; letter-spacing: 0; }
       .artist { font: 500 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: rgba(255,255,255,.64); letter-spacing: 0; }
@@ -73,7 +76,7 @@ export function renderPlayerSvg(metadata, options = {}) {
         <rect x="38" y="56" width="168" height="168" fill="#ffffff" opacity=".05"/>
       </g>
 
-      <text x="236" y="119" class="title">${xmlText(title)}</text>
+      ${renderTitle(title)}
       <text x="236" y="178" class="artist">${xmlText(artist)}</text>
 
       <text x="50" y="285" class="time">0:33</text>
@@ -91,6 +94,37 @@ export function renderPlayerSvg(metadata, options = {}) {
     </g>
   </g>
 </svg>`;
+}
+
+function renderTitle(title) {
+  const x = 236;
+  const y = 119;
+  const clipWidth = 622;
+  const estimatedWidth = estimateTitleWidth(title);
+  const overflow = Math.max(0, estimatedWidth - clipWidth);
+
+  if (!overflow) {
+    return `<g clip-path="url(#titleClip)"><text x="${x}" y="${y}" class="title">${xmlText(title)}</text></g>`;
+  }
+
+  const travel = Math.min(overflow + 60, 900);
+  const duration = Math.min(18, Math.max(9, title.length * 0.2));
+
+  return `<g clip-path="url(#titleClip)">
+        <text x="${x}" y="${y}" class="title">${xmlText(title)}
+          <animateTransform attributeName="transform" type="translate" values="0 0; -${travel} 0; -${travel} 0; 0 0" keyTimes="0; .42; .72; 1" dur="${duration}s" begin="1s" repeatCount="indefinite"/>
+        </text>
+      </g>`;
+}
+
+function estimateTitleWidth(value) {
+  return [...String(value)].reduce((width, char) => {
+    if (/\s/.test(char)) return width + 13;
+    if (/[ilI.,'|!]/.test(char)) return width + 11;
+    if (/[mwMW@#%&]/.test(char)) return width + 34;
+    if (char.charCodeAt(0) > 255) return width + 42;
+    return width + 25;
+  }, 0);
 }
 
 function renderFallbackCover() {

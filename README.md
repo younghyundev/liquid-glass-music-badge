@@ -12,10 +12,10 @@ so it works cleanly as a GitHub README `<img>` embed.
 
 ## Preview
 
-<img src="https://liquid-glass-music-badge.vercel.app/player.svg?url=https%3A%2F%2Fyoutu.be%2F1JS5Td0MeNE%3Fsi%3DecOPZLccoV28Niip" alt="Liquid glass music badge" width="920" />
+<img src="https://liquid-glass-music-badge.vercel.app/player.svg?url=https%3A%2F%2Fyoutu.be%2F1JS5Td0MeNE%3Fsi%3DecOPZLccoV28Niip&v=2" alt="Liquid glass music badge" width="920" />
 
 ```html
-<img src="https://liquid-glass-music-badge.vercel.app/player.svg?url=https%3A%2F%2Fyoutu.be%2F1JS5Td0MeNE%3Fsi%3DecOPZLccoV28Niip" alt="Liquid glass music badge" width="920" />
+<img src="https://liquid-glass-music-badge.vercel.app/player.svg?url=https%3A%2F%2Fyoutu.be%2F1JS5Td0MeNE%3Fsi%3DecOPZLccoV28Niip&v=2" alt="Liquid glass music badge" width="920" />
 ```
 
 ## Features
