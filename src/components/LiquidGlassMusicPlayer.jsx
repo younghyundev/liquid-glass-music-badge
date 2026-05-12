@@ -1,4 +1,5 @@
 import React from "react";
+import LiquidGlass from "liquid-glass-react";
 
 const iconProps = {
   viewBox: "0 0 64 64",
@@ -65,31 +66,6 @@ const controls = [
   { label: "Repeat", Icon: RepeatIcon, tone: "quiet" }
 ];
 
-function LiquidGlassFilters() {
-  return (
-    <svg className="lgmp-filterDefs" aria-hidden="true" focusable="false">
-      <defs>
-        <filter id="lgmp-liquid-refraction" x="-8%" y="-12%" width="116%" height="124%" colorInterpolationFilters="sRGB">
-          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="7" stitchTiles="stitch" result="rippleNoise" />
-          <feDisplacementMap in="SourceGraphic" in2="rippleNoise" scale="18" xChannelSelector="R" yChannelSelector="G" result="rippledGlass" />
-
-          <feColorMatrix in="rippledGlass" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redChannel" />
-          <feColorMatrix in="rippledGlass" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0" result="greenChannel" />
-          <feColorMatrix in="rippledGlass" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0" result="blueChannel" />
-
-          <feOffset in="redChannel" dx="1.35" dy="0.35" result="redOffset" />
-          <feOffset in="blueChannel" dx="-1.35" dy="-0.35" result="blueOffset" />
-          <feBlend in="redOffset" in2="greenChannel" mode="screen" result="redGreen" />
-          <feBlend in="redGreen" in2="blueOffset" mode="screen" result="chromaticGlass" />
-
-          <feColorMatrix in="chromaticGlass" type="saturate" values="1.22" result="saturatedGlass" />
-          <feComposite in="saturatedGlass" in2="SourceGraphic" operator="over" />
-        </filter>
-      </defs>
-    </svg>
-  );
-}
-
 export default function LiquidGlassMusicPlayer({
   title = "Birds of a Feather",
   artist = "Billie Eilish",
@@ -102,44 +78,55 @@ export default function LiquidGlassMusicPlayer({
 
   return (
     <section className="lgmp-stage" aria-label="Liquid glass music player preview">
-      <LiquidGlassFilters />
-      <article className="lgmp-card">
-        <div className="lgmp-cardSurface" />
-        <div className="lgmp-refractLayer" aria-hidden="true" />
+      <LiquidGlass
+        className="lgmp-liquidGlass"
+        displacementScale={58}
+        blurAmount={0.48}
+        saturation={165}
+        aberrationIntensity={2.4}
+        elasticity={0.08}
+        cornerRadius={38}
+        padding="0"
+        mode="prominent"
+        style={{ position: "absolute", top: "50%", left: "50%" }}
+      >
+        <article className="lgmp-card">
+          <div className="lgmp-cardSurface" />
 
-        <div className="lgmp-content">
-          <div className="lgmp-artWrap" aria-hidden="true">
-            {albumArtUrl ? (
-              <img className="lgmp-art" src={albumArtUrl} alt="" />
-            ) : (
-              <div className="lgmp-art lgmp-artFallback">
-                <span />
-              </div>
-            )}
-          </div>
-
-          <div className="lgmp-trackMeta">
-            <h2>{title}</h2>
-            <p>{artist}</p>
-          </div>
-
-          <div className="lgmp-progressRow" aria-label={`${currentTime} elapsed, ${remainingTime} remaining`}>
-            <span>{currentTime}</span>
-            <div className="lgmp-progressTrack" aria-hidden="true">
-              <div className="lgmp-progressFill" style={{ width: `${boundedProgress}%` }} />
+          <div className="lgmp-content">
+            <div className="lgmp-artWrap" aria-hidden="true">
+              {albumArtUrl ? (
+                <img className="lgmp-art" src={albumArtUrl} alt="" />
+              ) : (
+                <div className="lgmp-art lgmp-artFallback">
+                  <span />
+                </div>
+              )}
             </div>
-            <span>{remainingTime}</span>
-          </div>
 
-          <div className="lgmp-controls" aria-label="Music controls">
-            {controls.map(({ label, Icon, tone }) => (
-              <button className={`lgmp-control lgmp-control-${tone}`} type="button" aria-label={label} key={label}>
-                <Icon />
-              </button>
-            ))}
+            <div className="lgmp-trackMeta">
+              <h2>{title}</h2>
+              <p>{artist}</p>
+            </div>
+
+            <div className="lgmp-progressRow" aria-label={`${currentTime} elapsed, ${remainingTime} remaining`}>
+              <span>{currentTime}</span>
+              <div className="lgmp-progressTrack" aria-hidden="true">
+                <div className="lgmp-progressFill" style={{ width: `${boundedProgress}%` }} />
+              </div>
+              <span>{remainingTime}</span>
+            </div>
+
+            <div className="lgmp-controls" aria-label="Music controls">
+              {controls.map(({ label, Icon, tone }) => (
+                <button className={`lgmp-control lgmp-control-${tone}`} type="button" aria-label={label} key={label}>
+                  <Icon />
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </article>
+        </article>
+      </LiquidGlass>
     </section>
   );
 }

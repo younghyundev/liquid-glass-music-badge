@@ -13,35 +13,38 @@
   --lgmp-shadow: 0 34px 88px rgba(0, 0, 0, 0.46), 0 1px 0 rgba(255, 255, 255, 0.18) inset;
 }
 
-.lgmp-filterDefs {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
 .lgmp-stage {
   position: relative;
   isolation: isolate;
-  display: grid;
-  place-items: center;
   min-height: 560px;
   padding: 54px 24px;
   color: var(--lgmp-text);
   background: transparent;
 }
 
+.lgmp-liquidGlass {
+  isolation: isolate;
+}
+
+.lgmp-liquidGlass .glass {
+  background: transparent;
+}
+
+.lgmp-liquidGlass .glass__warp {
+  opacity: 0.95;
+}
+
 .lgmp-card {
   position: relative;
-  width: min(100%, var(--lgmp-card-width));
+  width: min(calc(100vw - 48px), var(--lgmp-card-width));
   min-height: 424px;
   overflow: hidden;
   border: 1px solid var(--lgmp-border);
   border-radius: var(--lgmp-card-radius);
   background: var(--lgmp-card-bg);
   box-shadow: var(--lgmp-shadow);
-  backdrop-filter: blur(28px) contrast(82%) saturate(145%) brightness(1.08);
-  -webkit-backdrop-filter: blur(28px) contrast(82%) saturate(145%) brightness(1.08);
+  backdrop-filter: blur(12px) contrast(86%) saturate(128%) brightness(1.04);
+  -webkit-backdrop-filter: blur(12px) contrast(86%) saturate(128%) brightness(1.04);
 }
 
 .lgmp-card::before,
@@ -87,25 +90,8 @@
     inset -2px -2px 34px rgba(255, 255, 255, 0.18),
     inset 0 0 0 1px rgba(255, 255, 255, 0.12),
     inset 0 -36px 70px rgba(0, 0, 0, 0.14);
-  backdrop-filter: blur(20px) contrast(80%) saturate(135%) brightness(1.08);
-  -webkit-backdrop-filter: blur(20px) contrast(80%) saturate(135%) brightness(1.08);
-}
-
-.lgmp-refractLayer {
-  position: absolute;
-  inset: -12px;
-  z-index: 1;
-  border-radius: calc(var(--lgmp-card-radius) + 8px);
-  pointer-events: none;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 36%, rgba(255, 255, 255, 0.04)),
-    radial-gradient(ellipse at 9% 50%, rgba(255, 255, 255, 0.14), transparent 20%),
-    radial-gradient(ellipse at 94% 48%, rgba(255, 255, 255, 0.1), transparent 18%);
-  opacity: 0.68;
-  backdrop-filter: blur(6px) contrast(78%) saturate(160%);
-  -webkit-backdrop-filter: blur(6px) contrast(78%) saturate(160%);
-  filter: url("#lgmp-liquid-refraction");
-  mix-blend-mode: screen;
+  backdrop-filter: blur(10px) contrast(82%) saturate(122%) brightness(1.04);
+  -webkit-backdrop-filter: blur(10px) contrast(82%) saturate(122%) brightness(1.04);
 }
 
 .lgmp-content {
@@ -300,15 +286,8 @@
     -webkit-backdrop-filter: none;
   }
 
-  .lgmp-refractLayer {
-    opacity: 0.22;
-    filter: none;
-  }
-}
-
-@supports not (filter: url("#lgmp-liquid-refraction")) {
-  .lgmp-refractLayer {
-    filter: none;
+  .lgmp-liquidGlass .glass__warp {
+    filter: none !important;
   }
 }
 
