@@ -9,45 +9,6 @@
   </head>
   <body>
     <div id="liquid-glass-react-root"></div>
-    <main class="shell">
-      <section class="workspace" aria-label="Liquid glass player generator">
-        <div class="controls">
-          <div>
-            <p class="eyebrow">README SVG generator</p>
-            <h1>Liquid Glass Music Player</h1>
-            <p class="copy">Paste a YouTube link and generate an animated player image for a GitHub README.</p>
-          </div>
-
-          <label>
-            <span>YouTube link</span>
-            <input id="youtubeUrl" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ" autocomplete="off" />
-          </label>
-
-          <div class="row">
-            <label>
-              <span>Title override</span>
-              <input id="titleOverride" placeholder="Optional" autocomplete="off" />
-            </label>
-            <label>
-              <span>Artist override</span>
-              <input id="artistOverride" placeholder="Optional" autocomplete="off" />
-            </label>
-          </div>
-
-          <div class="actions">
-            <button id="refresh" type="button">Refresh preview</button>
-            <button id="copy" type="button" class="secondary">Copy img tag</button>
-          </div>
-
-          <pre id="snippet" aria-live="polite"></pre>
-        </div>
-
-        <div class="previewPanel">
-          <img id="preview" alt="Generated liquid glass music player SVG preview" />
-        </div>
-      </section>
-    </main>
     <script src="/assets/react-preview.js" type="module"></script>
-    <script src="/assets/app.js" type="module"></script>
   </body>
 </html>

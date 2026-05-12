@@ -91,31 +91,28 @@ export default function LiquidGlassMusicPlayer({
             )}
           </div>
 
-          <div className="lgmp-details">
-            <div className="lgmp-trackMeta">
-              <h2>{title}</h2>
-              <p>{artist}</p>
-            </div>
+          <div className="lgmp-trackMeta">
+            <h2>{title}</h2>
+            <p>{artist}</p>
+          </div>
 
-            <div className="lgmp-progressRow" aria-label={`${currentTime} elapsed, ${remainingTime} remaining`}>
-              <span>{currentTime}</span>
-              <div className="lgmp-progressTrack" aria-hidden="true">
-                <div className="lgmp-progressFill" style={{ width: `${boundedProgress}%` }} />
-              </div>
-              <span>{remainingTime}</span>
+          <div className="lgmp-progressRow" aria-label={`${currentTime} elapsed, ${remainingTime} remaining`}>
+            <span>{currentTime}</span>
+            <div className="lgmp-progressTrack" aria-hidden="true">
+              <div className="lgmp-progressFill" style={{ width: `${boundedProgress}%` }} />
             </div>
+            <span>{remainingTime}</span>
+          </div>
 
-            <div className="lgmp-controls" aria-label="Music controls">
-              {controls.map(({ label, Icon, tone }) => (
-                <button className={`lgmp-control lgmp-control-${tone}`} type="button" aria-label={label} key={label}>
-                  <Icon />
-                </button>
-              ))}
-            </div>
+          <div className="lgmp-controls" aria-label="Music controls">
+            {controls.map(({ label, Icon, tone }) => (
+              <button className={`lgmp-control lgmp-control-${tone}`} type="button" aria-label={label} key={label}>
+                <Icon />
+              </button>
+            ))}
           </div>
         </div>
       </article>
     </section>
   );
 }
-
