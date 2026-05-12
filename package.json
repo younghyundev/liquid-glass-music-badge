@@ -10,6 +10,10 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "esbuild": "^0.28.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
   }
 }
-

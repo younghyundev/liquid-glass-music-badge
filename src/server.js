@@ -2,6 +2,7 @@ import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import * as esbuild from "esbuild";
 import { fetchYouTubeMetadata, metadataFromQuery } from "./youtube.js";
 import { renderPlayerSvg } from "./svg.js";
 
@@ -13,6 +14,7 @@ const contentTypes = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
+  ".jsx": "text/javascript; charset=utf-8",
   ".svg": "image/svg+xml; charset=utf-8",
   ".json": "application/json; charset=utf-8",
   ".png": "image/png"
@@ -56,6 +58,39 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  if (currentUrl.pathname === "/assets/react-preview.js") {
+    try {
+      const bundled = await esbuild.build({
+        entryPoints: [join(root, "src", "main.jsx")],
+        bundle: true,
+        format: "esm",
+        platform: "browser",
+        write: false,
+        jsx: "automatic",
+        logLevel: "silent"
+      });
+
+      response.writeHead(200, { "content-type": contentTypes[".js"] });
+      response.end(bundled.outputFiles[0].text);
+    } catch (error) {
+      response.writeHead(500, { "content-type": "text/plain; charset=utf-8" });
+      response.end(`React bundle failed: ${error.message}`);
+    }
+    return;
+  }
+
+  if (currentUrl.pathname.startsWith("/src/components/")) {
+    const componentPath = currentUrl.pathname.replace(/^\/+/, "");
+    if (componentPath.includes("..")) {
+      response.writeHead(400, { "content-type": "text/plain; charset=utf-8" });
+      response.end("Bad request");
+      return;
+    }
+
+    await serveStaticFile(response, join(root, componentPath));
+    return;
+  }
+
   const pathname = currentUrl.pathname === "/" ? "/index.html" : currentUrl.pathname;
   const safePath = pathname.replace(/^\/+/, "");
 
@@ -65,8 +100,11 @@ export async function handleRequest(request, response) {
     return;
   }
 
+  await serveStaticFile(response, join(publicRoot, safePath));
+}
+
+async function serveStaticFile(response, filePath) {
   try {
-    const filePath = join(publicRoot, safePath);
     const data = await readFile(filePath);
     response.writeHead(200, {
       "content-type": contentTypes[extname(filePath)] || "application/octet-stream"
