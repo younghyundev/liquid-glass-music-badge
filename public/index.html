@@ -9,6 +9,66 @@
   </head>
   <body>
     <div id="liquid-glass-react-root"></div>
+
+    <main class="shell" aria-labelledby="tester-title">
+      <section class="workspace">
+        <form class="controls" aria-label="README SVG player tester">
+          <p class="eyebrow">README image tester</p>
+          <h1 id="tester-title">Generate an embeddable player</h1>
+          <p class="copy">
+            Paste a YouTube link to preview the static SVG that can be used in a GitHub README
+            with an <code>img</code> tag.
+          </p>
+
+          <label for="youtubeUrl">
+            YouTube link
+            <input
+              id="youtubeUrl"
+              name="youtubeUrl"
+              type="url"
+              inputmode="url"
+              autocomplete="url"
+              value="https://youtu.be/dQw4w9WgXcQ"
+              placeholder="https://youtu.be/..."
+            />
+          </label>
+
+          <div class="row">
+            <label for="titleOverride">
+              Title override optional
+              <input
+                id="titleOverride"
+                name="titleOverride"
+                type="text"
+                placeholder="Birds of a Feather"
+              />
+            </label>
+            <label for="artistOverride">
+              Artist override optional
+              <input
+                id="artistOverride"
+                name="artistOverride"
+                type="text"
+                placeholder="Billie Eilish"
+              />
+            </label>
+          </div>
+
+          <div class="actions">
+            <button id="refresh" type="button">Refresh preview</button>
+            <button id="copy" class="secondary" type="button">Copy img tag</button>
+          </div>
+
+          <pre id="snippet" tabindex="0" aria-live="polite"></pre>
+        </form>
+
+        <section class="previewPanel" aria-label="Generated SVG preview">
+          <img id="preview" alt="Generated README liquid glass music player SVG preview" />
+        </section>
+      </section>
+    </main>
+
     <script src="/assets/react-preview.js" type="module"></script>
+    <script src="/assets/app.js" type="module"></script>
   </body>
 </html>
