@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/player.svg",
+      "destination": "/api/player"
+    }
+  ]
+}
