@@ -84,10 +84,12 @@ export default function LiquidGlassMusicPlayer({
         blurAmount={0.48}
         saturation={165}
         aberrationIntensity={2.4}
-        elasticity={0.08}
+        elasticity={0}
         cornerRadius={38}
         padding="0"
         mode="prominent"
+        globalMousePos={{ x: 0, y: 0 }}
+        mouseOffset={{ x: 0, y: 0 }}
         style={{ position: "absolute", top: "50%", left: "50%" }}
       >
         <article className="lgmp-card">

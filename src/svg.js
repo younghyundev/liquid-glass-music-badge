@@ -3,11 +3,8 @@ import { thumbnailUrl } from "./youtube.js";
 export function renderPlayerSvg(metadata, options = {}) {
   const videoId = metadata.videoId;
   const cover = metadata.thumbnail || thumbnailUrl(videoId) || "";
-  const title = truncate(metadata.title || "YouTube Track", 44);
-  const artist = truncate(metadata.artist || "Unknown Artist", 38);
-  const accent = chooseAccent(videoId || title);
-  const darkAccent = shade(accent, -36);
-  const lightAccent = shade(accent, 52);
+  const title = truncate(metadata.title || "Birds of a Feather", 32);
+  const artist = truncate(metadata.artist || "Billie Eilish", 28);
   const controls = {
     shuffle: "/assets/controls/shuffle.png",
     previous: "/assets/controls/previous.png",
@@ -18,127 +15,90 @@ export function renderPlayerSvg(metadata, options = {}) {
   };
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="860" height="320" viewBox="0 0 860 320" role="img" aria-label="${xmlAttr(title)} by ${xmlAttr(artist)}">
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="424" viewBox="0 0 920 424" role="img" aria-label="${xmlAttr(title)} by ${xmlAttr(artist)}">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#eef7ff"/>
-      <stop offset="42%" stop-color="${xmlAttr(lightAccent)}"/>
-      <stop offset="100%" stop-color="#f7f4ff"/>
+    <linearGradient id="cardGlass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="42%" stop-color="#0a0710" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.24"/>
     </linearGradient>
-    <radialGradient id="liquidA" cx="20%" cy="15%" r="70%">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.92"/>
-      <stop offset="55%" stop-color="${xmlAttr(accent)}" stop-opacity="0.34"/>
-      <stop offset="100%" stop-color="${xmlAttr(darkAccent)}" stop-opacity="0.08"/>
-    </radialGradient>
-    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.74"/>
-      <stop offset="48%" stop-color="#ffffff" stop-opacity="0.36"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.19"/>
+    <linearGradient id="edgeLight" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.42"/>
+      <stop offset="36%" stop-color="#ffffff" stop-opacity="0.09"/>
+      <stop offset="68%" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.26"/>
     </linearGradient>
-    <linearGradient id="progress" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="${xmlAttr(darkAccent)}"/>
-      <stop offset="58%" stop-color="${xmlAttr(accent)}"/>
-      <stop offset="100%" stop-color="#ffffff"/>
+    <linearGradient id="specular" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="44%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="58%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
-    <filter id="softShadow" x="-20%" y="-30%" width="140%" height="160%">
-      <feDropShadow dx="0" dy="22" stdDeviation="26" flood-color="#263248" flood-opacity="0.2"/>
+    <linearGradient id="progressFill" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.96"/>
+      <stop offset="100%" stop-color="#d8d3dc" stop-opacity="0.94"/>
+    </linearGradient>
+    <filter id="softShadow" x="-16%" y="-24%" width="132%" height="152%">
+      <feDropShadow dx="0" dy="30" stdDeviation="34" flood-color="#000000" flood-opacity="0.45"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="1" flood-color="#ffffff" flood-opacity="0.16"/>
     </filter>
-    <filter id="blur">
-      <feGaussianBlur stdDeviation="15"/>
+    <filter id="surfaceBlur">
+      <feGaussianBlur stdDeviation="18"/>
     </filter>
-    <clipPath id="coverClip">
-      <rect x="82" y="64" width="192" height="192" rx="34"/>
+    <clipPath id="cardClip">
+      <rect x="0" y="0" width="920" height="424" rx="38"/>
     </clipPath>
-    <clipPath id="progressClip">
-      <rect x="340" y="223" width="328" height="10" rx="5"/>
+    <clipPath id="coverClip">
+      <rect x="38" y="56" width="168" height="168" rx="20"/>
     </clipPath>
     <style>
-      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
-      .artist { font: 500 20px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #546078; }
-      .time { font: 600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #69738b; }
-      .glassStroke { stroke: rgba(255,255,255,.78); stroke-width: 1.4; }
-      .bar { transform-origin: center bottom; animation: bounce 1.05s ease-in-out infinite; }
-      .bar:nth-child(2) { animation-delay: .12s; }
-      .bar:nth-child(3) { animation-delay: .22s; }
-      .bar:nth-child(4) { animation-delay: .34s; }
-      .pulse { animation: pulse 2.2s ease-in-out infinite; }
-      .glint { animation: glide 2.8s ease-in-out infinite; }
-      .needle { animation: nudge 1.8s ease-in-out infinite; transform-origin: 694px 138px; }
-      @keyframes bounce { 0%,100% { transform: scaleY(.42); } 45% { transform: scaleY(1); } }
-      @keyframes pulse { 0%,100% { opacity: .55; transform: scale(1); } 50% { opacity: .95; transform: scale(1.04); } }
-      @keyframes glide { 0% { transform: translateX(-160px); opacity: 0; } 24%,62% { opacity: .72; } 100% { transform: translateX(410px); opacity: 0; } }
-      @keyframes nudge { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
+      .title { font: 730 44px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; letter-spacing: 0; }
+      .artist { font: 500 38px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: rgba(255,255,255,.64); letter-spacing: 0; }
+      .time { font: 760 30px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #ffffff; letter-spacing: 0; }
     </style>
   </defs>
 
-  <rect width="860" height="320" fill="url(#bg)"/>
-  <circle cx="158" cy="70" r="118" fill="url(#liquidA)" filter="url(#blur)" opacity=".78"/>
-  <circle cx="706" cy="248" r="146" fill="${xmlAttr(accent)}" filter="url(#blur)" opacity=".24"/>
-  <path d="M580 28C681-3 820 38 849 122c30 86-41 157-122 147-101-11-104-105-176-130-75-27-72-81 29-111Z" fill="#fff" opacity=".33" filter="url(#blur)"/>
+  <g filter="url(#softShadow)">
+    <g clip-path="url(#cardClip)">
+      <rect width="920" height="424" rx="38" fill="url(#cardGlass)"/>
+      <rect x="-20" y="-22" width="960" height="470" fill="#ffffff" opacity=".075"/>
+      <path d="M-120 316C96 142 214 65 454 103c153 24 271 5 578-165v532H-120Z" fill="#ffffff" opacity=".06" filter="url(#surfaceBlur)"/>
+      <path d="M-20 58h960v84H-20z" fill="url(#specular)" opacity=".74" transform="rotate(-22 460 100)"/>
+      <path d="M28 25H760c64 0 111 38 126 91" fill="none" stroke="#ffffff" stroke-opacity=".26" stroke-width="2"/>
+      <rect x="1" y="1" width="918" height="422" rx="37" fill="none" stroke="url(#edgeLight)" stroke-width="2"/>
+      <rect x="8" y="8" width="904" height="408" rx="32" fill="none" stroke="#ffffff" stroke-opacity=".11"/>
 
-  <rect x="48" y="38" width="764" height="244" rx="52" fill="url(#glass)" class="glassStroke" filter="url(#softShadow)"/>
-  <rect x="58" y="48" width="744" height="224" rx="44" fill="#ffffff" opacity=".13"/>
-  <path d="M92 58H700c42 0 72 26 81 61" fill="none" stroke="#ffffff" stroke-width="2" opacity=".72"/>
+      <g clip-path="url(#coverClip)">
+        ${cover ? `<image href="${xmlAttr(cover)}" x="38" y="56" width="168" height="168" preserveAspectRatio="xMidYMid slice"/>` : renderFallbackCover()}
+        <rect x="38" y="56" width="168" height="168" fill="#ffffff" opacity=".05"/>
+      </g>
 
-  <g clip-path="url(#coverClip)">
-    ${cover ? `<image href="${xmlAttr(cover)}" x="82" y="64" width="192" height="192" preserveAspectRatio="xMidYMid slice"/>` : `<rect x="82" y="64" width="192" height="192" fill="${xmlAttr(darkAccent)}"/>`}
-    <rect x="82" y="64" width="192" height="192" fill="url(#glass)" opacity=".16"/>
-    <path class="glint" d="M34 53h74l-86 219h-74z" fill="#ffffff" opacity=".55"/>
-  </g>
-  <rect x="82" y="64" width="192" height="192" rx="34" fill="none" stroke="#ffffff" stroke-opacity=".78" stroke-width="1.5"/>
+      <text x="236" y="119" class="title">${xmlText(title)}</text>
+      <text x="236" y="178" class="artist">${xmlText(artist)}</text>
 
-  <text x="340" y="112" class="title">${xmlText(title)}</text>
-  <text x="340" y="148" class="artist">${xmlText(artist)}</text>
+      <text x="50" y="285" class="time">0:33</text>
+      <rect x="140" y="268" width="626" height="18" rx="9" fill="#ffffff" opacity=".22"/>
+      <rect x="140" y="268" width="263" height="18" rx="9" fill="url(#progressFill)"/>
+      <text x="796" y="285" class="time">-1:40</text>
 
-  <g transform="translate(340 169)" opacity=".9">
-    <rect x="-15" y="-12" width="276" height="70" rx="35" fill="#ffffff" opacity=".25" class="glassStroke"/>
-    <image href="${xmlAttr(controls.shuffle)}" x="5" y="13" width="31" height="24" preserveAspectRatio="xMidYMid meet" opacity=".58"/>
-    <image href="${xmlAttr(controls.previous)}" x="57" y="5" width="38" height="40" preserveAspectRatio="xMidYMid meet" opacity=".82"/>
-    <circle cx="135" cy="25" r="32" fill="#ffffff" opacity=".52" class="glassStroke pulse"/>
-    <image href="${xmlAttr(controls.pause)}" x="116" y="3" width="38" height="44" preserveAspectRatio="xMidYMid meet" opacity=".94"/>
-    <image href="${xmlAttr(controls.next)}" x="177" y="5" width="38" height="40" preserveAspectRatio="xMidYMid meet" opacity=".82"/>
-    <image href="${xmlAttr(controls.repeat)}" x="235" y="13" width="32" height="24" preserveAspectRatio="xMidYMid meet" opacity=".58"/>
-    <rect class="bar" x="294" y="16" width="6" height="24" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".86"/>
-    <rect class="bar" x="307" y="10" width="6" height="30" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".72"/>
-    <rect class="bar" x="320" y="19" width="6" height="21" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".62"/>
-    <rect class="bar" x="333" y="6" width="6" height="34" rx="3" fill="${xmlAttr(darkAccent)}" opacity=".8"/>
-  </g>
-
-  <rect x="340" y="223" width="328" height="10" rx="5" fill="#ffffff" opacity=".44"/>
-  <g clip-path="url(#progressClip)">
-    <rect class="glint" x="340" y="223" width="172" height="10" fill="url(#progress)"/>
-    <rect x="340" y="223" width="178" height="10" rx="5" fill="url(#progress)" opacity=".76"/>
-  </g>
-  <text x="340" y="252" class="time">1:17</text>
-  <text x="637" y="252" class="time">3:46</text>
-
-  <g transform="translate(694 138)">
-    <circle r="54" fill="#ffffff" opacity=".34" class="glassStroke pulse"/>
-    <circle r="34" fill="${xmlAttr(accent)}" opacity=".22"/>
-    <circle r="13" fill="#ffffff" opacity=".82"/>
-    <path class="needle" d="M7-44c24 8 40 26 44 52" fill="none" stroke="${xmlAttr(darkAccent)}" stroke-width="6" stroke-linecap="round" opacity=".68"/>
+      <g opacity=".98">
+        <image href="${xmlAttr(controls.shuffle)}" x="72" y="334" width="44" height="34" preserveAspectRatio="xMidYMid meet"/>
+        <image href="${xmlAttr(controls.previous)}" x="270" y="313" width="76" height="80" preserveAspectRatio="xMidYMid meet"/>
+        <image href="${xmlAttr(controls.pause)}" x="422" y="312" width="78" height="82" preserveAspectRatio="xMidYMid meet"/>
+        <image href="${xmlAttr(controls.next)}" x="574" y="313" width="76" height="80" preserveAspectRatio="xMidYMid meet"/>
+        <image href="${xmlAttr(controls.repeat)}" x="804" y="334" width="46" height="34" preserveAspectRatio="xMidYMid meet"/>
+      </g>
+    </g>
   </g>
 </svg>`;
 }
 
-export function chooseAccent(seed) {
-  const palette = ["#5e8cff", "#22a699", "#ff7a59", "#b56cff", "#e0507d", "#2d9cdb"];
-  let hash = 0;
-  for (const char of seed || "liquid") hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  return palette[hash % palette.length];
-}
-
-function shade(hex, amount) {
-  const raw = hex.replace("#", "");
-  const n = Number.parseInt(raw, 16);
-  const r = clamp((n >> 16) + amount);
-  const g = clamp(((n >> 8) & 255) + amount);
-  const b = clamp((n & 255) + amount);
-  return `#${[r, g, b].map((v) => v.toString(16).padStart(2, "0")).join("")}`;
-}
-
-function clamp(value) {
-  return Math.max(0, Math.min(255, value));
+function renderFallbackCover() {
+  return `
+        <rect x="38" y="56" width="168" height="168" fill="#7b5731"/>
+        <circle cx="142" cy="83" r="42" fill="#f6dfb6" opacity=".88"/>
+        <path d="M78 216c12-58 36-92 73-101 30-7 49 26 42 101Z" fill="#ead0a7" opacity=".9"/>
+        <path d="M42 56h164v168H42z" fill="#20170f" opacity=".18"/>`;
 }
 
 function truncate(value, max) {

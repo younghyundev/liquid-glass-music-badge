@@ -244,8 +244,7 @@
   border-radius: 20px;
   color: #ffffff;
   background: transparent;
-  cursor: pointer;
-  transition: transform 180ms ease, background-color 180ms ease;
+  cursor: default;
 }
 
 .lgmp-control svg {
@@ -262,11 +261,6 @@
 .lgmp-control-primary svg {
   width: 78px;
   height: 78px;
-}
-
-.lgmp-control:hover {
-  transform: translateY(-2px) scale(1.03);
-  background: rgba(255, 255, 255, 0.06);
 }
 
 .lgmp-control:focus-visible {
@@ -431,11 +425,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lgmp-control {
-    transition: none;
-  }
-
-  .lgmp-control:hover {
-    transform: none;
+  .lgmp-liquidGlass,
+  .lgmp-liquidGlass * {
+    transition: none !important;
   }
 }
