@@ -212,19 +212,27 @@ const CONTROL_ICONS: Record<ControlName, string> = {
 function renderTitle(title: string): string {
   const { x, y, clipWidth } = PLAYER_STYLE.typography.title;
   const estimatedWidth = estimateTitleWidth(title);
-  const overflow = Math.max(0, estimatedWidth - clipWidth);
 
-  if (!overflow) {
+  if (estimatedWidth <= clipWidth) {
     return `<g clip-path="url(#titleClip)"><text x="${x}" y="${y}" class="title">${xmlText(title)}</text></g>`;
   }
 
-  const travel = Math.min(overflow + 60, 900);
-  const duration = Math.min(18, Math.max(9, title.length * 0.2));
+  // iOS-style infinite one-direction marquee: two copies separated by a gap.
+  // When the first copy scrolls fully off-screen left, the second copy lands
+  // exactly where the first one started, so the reset to 0 is invisible.
+  const PX_PER_SECOND = 38;
+  const GAP = 80;
+  const loopDistance = estimatedWidth + GAP;
+  const duration = (loopDistance / PX_PER_SECOND).toFixed(2);
+  const secondCopyX = x + loopDistance;
+  const escaped = xmlText(title);
 
   return `<g clip-path="url(#titleClip)">
-        <text x="${x}" y="${y}" class="title">${xmlText(title)}
-          <animateTransform attributeName="transform" type="translate" values="0 0; -${travel} 0; -${travel} 0; 0 0" keyTimes="0; .42; .72; 1" dur="${duration}s" begin="1s" repeatCount="indefinite"/>
-        </text>
+        <g>
+          <text x="${x}" y="${y}" class="title">${escaped}</text>
+          <text x="${secondCopyX}" y="${y}" class="title">${escaped}</text>
+          <animateTransform attributeName="transform" type="translate" from="0 0" to="-${loopDistance} 0" dur="${duration}s" begin="1.5s" repeatCount="indefinite"/>
+        </g>
       </g>`;
 }
 
