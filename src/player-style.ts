@@ -79,7 +79,7 @@ export const PLAYER_STYLE = {
     },
     time: {
       size: 30,
-      weight: 760
+      weight: 540
     }
   },
   progress: {
