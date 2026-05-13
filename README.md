@@ -1,3 +1,5 @@
+<img width="2172" height="724" alt="image" src="https://github.com/user-attachments/assets/6f33c4fe-187e-4fc3-aaf1-2b8e97d0face" />
+
 # Liquid Glass Music Badge
 
 A README-embeddable liquid glass music badge generated from YouTube links. Built
