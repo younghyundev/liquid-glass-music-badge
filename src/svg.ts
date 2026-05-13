@@ -120,12 +120,30 @@ function renderCardBackground(): string {
 
 function renderArtwork(cover: string): string {
   const { art } = PLAYER_STYLE;
-  const image = cover
-    ? `<image href="${xmlAttr(cover)}" x="${art.x}" y="${art.y}" width="${art.size}" height="${art.size}" preserveAspectRatio="xMidYMid slice"/>`
-    : renderFallbackCover();
+
+  if (!cover) {
+    return `<g clip-path="url(#coverClip)">
+        ${renderFallbackCover()}
+        <rect x="${art.x}" y="${art.y}" width="${art.size}" height="${art.size}" fill="#ffffff" opacity=".05"/>
+      </g>`;
+  }
+
+  // YouTube's hqdefault.jpg is 480x360 (4:3). For 16:9 videos it places the
+  // actual frame at y=45..315 with 45px black letterboxes top and bottom.
+  // Scale the image so the 480x270 video band fills the square album slot and
+  // the letterboxes fall outside the clip path.
+  const SOURCE_W = 480;
+  const SOURCE_H = 360;
+  const LETTERBOX_TOP = 45;
+  const VIDEO_HEIGHT = 270;
+  const scale = art.size / VIDEO_HEIGHT;
+  const renderedW = SOURCE_W * scale;
+  const renderedH = SOURCE_H * scale;
+  const imageX = art.x - (renderedW - art.size) / 2;
+  const imageY = art.y - LETTERBOX_TOP * scale;
 
   return `<g clip-path="url(#coverClip)">
-        ${image}
+        <image href="${xmlAttr(cover)}" x="${imageX.toFixed(2)}" y="${imageY.toFixed(2)}" width="${renderedW.toFixed(2)}" height="${renderedH.toFixed(2)}" preserveAspectRatio="none"/>
         <rect x="${art.x}" y="${art.y}" width="${art.size}" height="${art.size}" fill="#ffffff" opacity=".05"/>
       </g>`;
 }
