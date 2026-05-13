@@ -1,3 +1,4 @@
+import { CONTROL_ICON_DATA_URIS } from "./control-icons";
 import { PLAYER_DEFAULTS, PLAYER_STYLE, type ControlBox, type ControlName } from "./player-style";
 import { thumbnailUrl } from "./youtube";
 
@@ -200,32 +201,10 @@ function renderControls(): string {
 }
 
 function renderControlIcon(name: ControlName, box: ControlBox): string {
-  const icon = CONTROL_ICONS[name];
+  const href = CONTROL_ICON_DATA_URIS[name];
 
-  return `<svg x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" viewBox="0 0 64 64" fill="none" color="#ffffff" overflow="visible" filter="url(#iconShadow)" aria-hidden="true">${icon}</svg>`;
+  return `<image href="${href}" x="${box.x}" y="${box.y}" width="${box.width}" height="${box.height}" preserveAspectRatio="xMidYMid meet" filter="url(#iconShadow)" aria-hidden="true"/>`;
 }
-
-const CONTROL_ICONS: Record<ControlName, string> = {
-  shuffle: `
-      <path d="M8 20h9.5c5.8 0 9.2 4.4 12.8 12 3.7 7.8 7.8 12 14.2 12H56" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M8 44h9.8c4.4 0 7.6-2.6 10.4-7.3" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M43 10l13 10-13 10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M43 34l13 10-13 10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>`,
-  previous: `
-      <path d="M16 15v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      <path d="M51 15L24 32l27 17V15Z" fill="currentColor"/>`,
-  pause: `
-      <rect x="19" y="15" width="8" height="34" rx="3.5" fill="currentColor"/>
-      <rect x="37" y="15" width="8" height="34" rx="3.5" fill="currentColor"/>`,
-  next: `
-      <path d="M48 15v34" stroke="currentColor" stroke-width="6" stroke-linecap="round"/>
-      <path d="M13 15l27 17-27 17V15Z" fill="currentColor"/>`,
-  repeat: `
-      <path d="M18 18h24c7 0 12 5 12 12v2" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M43 8l11 10-11 10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M46 46H22c-7 0-12-5-12-12v-2" stroke="currentColor" stroke-width="5.5" stroke-linecap="round"/>
-      <path d="M21 56L10 46l11-10" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>`
-};
 
 function renderTitle(title: string): string {
   const { x, y, clipWidth } = PLAYER_STYLE.typography.title;
