@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 const embedWidth = 920;
 
@@ -9,6 +9,7 @@ export default function BadgeTester() {
   const [titleOverride, setTitleOverride] = useState("");
   const [artistOverride, setArtistOverride] = useState("");
   const [copied, setCopied] = useState(false);
+  const [origin, setOrigin] = useState("");
 
   const playerUrl = useMemo(() => {
     const params = new URLSearchParams();
@@ -18,8 +19,11 @@ export default function BadgeTester() {
     return `/player.svg?${params.toString()}`;
   }, [artistOverride, titleOverride, youtubeUrl]);
 
-  const absoluteUrl =
-    typeof window === "undefined" ? playerUrl : new URL(playerUrl, window.location.origin).toString();
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
+
+  const absoluteUrl = origin ? new URL(playerUrl, origin).toString() : playerUrl;
   const snippet = `<img src="${absoluteUrl}" alt="Liquid glass music badge" width="${embedWidth}" />`;
 
   async function copySnippet() {

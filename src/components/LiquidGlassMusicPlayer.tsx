@@ -1,6 +1,8 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import LiquidGlass from "liquid-glass-react";
+import { boundedProgress, PLAYER_DEFAULTS, PLAYER_STYLE } from "../player-style.js";
 
 type LiquidGlassMusicPlayerProps = {
   title?: string;
@@ -69,25 +71,53 @@ function RepeatIcon() {
 }
 
 const controls = [
-  { label: "Shuffle", Icon: ShuffleIcon, tone: "quiet" },
-  { label: "Previous track", Icon: PreviousIcon, tone: "standard" },
-  { label: "Pause", Icon: PauseIcon, tone: "primary" },
-  { label: "Next track", Icon: NextIcon, tone: "standard" },
-  { label: "Repeat", Icon: RepeatIcon, tone: "quiet" }
-];
+  { key: "shuffle", label: "Shuffle", Icon: ShuffleIcon },
+  { key: "previous", label: "Previous track", Icon: PreviousIcon },
+  { key: "pause", label: "Pause", Icon: PauseIcon },
+  { key: "next", label: "Next track", Icon: NextIcon },
+  { key: "repeat", label: "Repeat", Icon: RepeatIcon }
+] as const;
+
+const playerStyleVars = {
+  "--lgmp-card-width": `${PLAYER_STYLE.card.width}px`,
+  "--lgmp-card-radius": `${PLAYER_STYLE.card.radius}px`,
+  "--lgmp-card-bg": PLAYER_STYLE.card.background,
+  "--lgmp-card-tint": PLAYER_STYLE.card.tint,
+  "--lgmp-card-bg-fallback": PLAYER_STYLE.card.fallbackBackground,
+  "--lgmp-border": PLAYER_STYLE.card.border,
+  "--lgmp-border-bright": PLAYER_STYLE.card.borderBright,
+  "--lgmp-text": PLAYER_STYLE.colors.text,
+  "--lgmp-muted": PLAYER_STYLE.colors.muted,
+  "--lgmp-progress-track": PLAYER_STYLE.colors.progressTrack,
+  "--lgmp-progress-fill-start": PLAYER_STYLE.colors.progressFillStart,
+  "--lgmp-progress-fill-end": PLAYER_STYLE.colors.progressFillEnd,
+  "--lgmp-shadow": PLAYER_STYLE.card.shadow,
+  "--lgmp-art-size": `${PLAYER_STYLE.art.size}px`,
+  "--lgmp-art-radius": `${PLAYER_STYLE.art.radius}px`,
+  "--lgmp-title-size": `${PLAYER_STYLE.typography.title.size}px`,
+  "--lgmp-title-weight": PLAYER_STYLE.typography.title.weight,
+  "--lgmp-title-line-height": PLAYER_STYLE.typography.title.lineHeight,
+  "--lgmp-artist-size": `${PLAYER_STYLE.typography.artist.size}px`,
+  "--lgmp-artist-weight": PLAYER_STYLE.typography.artist.weight,
+  "--lgmp-artist-line-height": PLAYER_STYLE.typography.artist.lineHeight,
+  "--lgmp-artist-margin-top": `${PLAYER_STYLE.typography.artist.marginTop}px`,
+  "--lgmp-time-size": `${PLAYER_STYLE.typography.time.size}px`,
+  "--lgmp-time-weight": PLAYER_STYLE.typography.time.weight,
+  "--lgmp-progress-height": `${PLAYER_STYLE.progress.height}px`
+} as CSSProperties;
 
 export default function LiquidGlassMusicPlayer({
-  title = "Birds of a Feather",
-  artist = "Billie Eilish",
-  currentTime = "0:33",
-  remainingTime = "-1:40",
-  progress = 42,
+  title = PLAYER_DEFAULTS.title,
+  artist = PLAYER_DEFAULTS.artist,
+  currentTime = PLAYER_DEFAULTS.currentTime,
+  remainingTime = PLAYER_DEFAULTS.remainingTime,
+  progress = PLAYER_DEFAULTS.progress,
   albumArtUrl = ""
 }: LiquidGlassMusicPlayerProps) {
-  const boundedProgress = Math.min(100, Math.max(0, Number(progress) || 0));
+  const progressValue = boundedProgress(progress);
 
   return (
-    <section className="lgmp-stage" aria-label="Liquid glass music player preview">
+    <section className="lgmp-stage" aria-label="Liquid glass music player preview" style={playerStyleVars}>
       <LiquidGlass
         className="lgmp-liquidGlass"
         displacementScale={58}
@@ -124,17 +154,25 @@ export default function LiquidGlassMusicPlayer({
             <div className="lgmp-progressRow" aria-label={`${currentTime} elapsed, ${remainingTime} remaining`}>
               <span>{currentTime}</span>
               <div className="lgmp-progressTrack" aria-hidden="true">
-                <div className="lgmp-progressFill" style={{ width: `${boundedProgress}%` }} />
+                <div className="lgmp-progressFill" style={{ width: `${progressValue}%` }} />
               </div>
               <span>{remainingTime}</span>
             </div>
 
             <div className="lgmp-controls" aria-label="Music controls">
-              {controls.map(({ label, Icon, tone }) => (
-                <button className={`lgmp-control lgmp-control-${tone}`} type="button" aria-label={label} key={label}>
-                  <Icon />
-                </button>
-              ))}
+              {controls.map(({ key, label, Icon }) => {
+                const control = PLAYER_STYLE.controls[key];
+                const controlVars = {
+                  "--lgmp-control-svg-width": `${control.width}px`,
+                  "--lgmp-control-svg-height": `${control.height}px`
+                } as CSSProperties;
+
+                return (
+                  <button className={`lgmp-control lgmp-control-${control.tone}`} type="button" aria-label={label} key={label} style={controlVars}>
+                    <Icon />
+                  </button>
+                );
+              })}
             </div>
           </div>
         </article>

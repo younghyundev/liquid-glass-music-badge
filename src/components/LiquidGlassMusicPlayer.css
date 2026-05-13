@@ -9,8 +9,23 @@
   --lgmp-text: #ffffff;
   --lgmp-muted: rgba(255, 255, 255, 0.64);
   --lgmp-progress-track: rgba(255, 255, 255, 0.22);
-  --lgmp-progress-fill: rgba(245, 241, 248, 0.92);
+  --lgmp-progress-fill-start: #f7f4fb;
+  --lgmp-progress-fill-end: #ddd7e6;
   --lgmp-shadow: 0 34px 88px rgba(0, 0, 0, 0.46), 0 1px 0 rgba(255, 255, 255, 0.18) inset;
+  --lgmp-art-size: 168px;
+  --lgmp-art-radius: 20px;
+  --lgmp-title-size: 44px;
+  --lgmp-title-weight: 730;
+  --lgmp-title-line-height: 1.06;
+  --lgmp-artist-size: 38px;
+  --lgmp-artist-weight: 500;
+  --lgmp-artist-line-height: 1.05;
+  --lgmp-artist-margin-top: 14px;
+  --lgmp-time-size: 30px;
+  --lgmp-time-weight: 760;
+  --lgmp-progress-height: 18px;
+  --lgmp-control-svg-width: 70px;
+  --lgmp-control-svg-height: 70px;
 }
 
 .lgmp-stage {
@@ -98,7 +113,7 @@
   position: relative;
   z-index: 3;
   display: grid;
-  grid-template-columns: 168px minmax(0, 1fr);
+  grid-template-columns: var(--lgmp-art-size) minmax(0, 1fr);
   grid-template-areas:
     "art meta"
     "progress progress"
@@ -111,10 +126,10 @@
 
 .lgmp-artWrap {
   grid-area: art;
-  width: 168px;
+  width: var(--lgmp-art-size);
   aspect-ratio: 1;
   overflow: hidden;
-  border-radius: 20px;
+  border-radius: var(--lgmp-art-radius);
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 18px 38px rgba(2, 0, 8, 0.38);
 }
@@ -176,9 +191,9 @@
   max-width: 100%;
   overflow: hidden;
   color: var(--lgmp-text);
-  font-size: 44px;
-  font-weight: 730;
-  line-height: 1.06;
+  font-size: var(--lgmp-title-size);
+  font-weight: var(--lgmp-title-weight);
+  line-height: var(--lgmp-title-line-height);
   letter-spacing: 0;
   text-overflow: ellipsis;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.28);
@@ -186,13 +201,13 @@
 }
 
 .lgmp-trackMeta p {
-  margin: 14px 0 0;
+  margin: var(--lgmp-artist-margin-top) 0 0;
   max-width: 100%;
   overflow: hidden;
   color: var(--lgmp-muted);
-  font-size: 38px;
-  font-weight: 500;
-  line-height: 1.05;
+  font-size: var(--lgmp-artist-size);
+  font-weight: var(--lgmp-artist-weight);
+  line-height: var(--lgmp-artist-line-height);
   letter-spacing: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -205,13 +220,13 @@
   gap: 22px;
   align-items: center;
   color: var(--lgmp-text);
-  font-size: 30px;
-  font-weight: 760;
+  font-size: var(--lgmp-time-size);
+  font-weight: var(--lgmp-time-weight);
   line-height: 1;
 }
 
 .lgmp-progressTrack {
-  height: 18px;
+  height: var(--lgmp-progress-height);
   overflow: hidden;
   border-radius: 999px;
   background: var(--lgmp-progress-track);
@@ -221,7 +236,7 @@
 .lgmp-progressFill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #f7f4fb, #ddd7e6);
+  background: linear-gradient(90deg, var(--lgmp-progress-fill-start), var(--lgmp-progress-fill-end));
   box-shadow: 0 0 22px rgba(255, 255, 255, 0.28);
 }
 
@@ -248,19 +263,9 @@
 }
 
 .lgmp-control svg {
-  width: 70px;
-  height: 70px;
+  width: var(--lgmp-control-svg-width);
+  height: var(--lgmp-control-svg-height);
   filter: drop-shadow(0 8px 12px rgba(0, 0, 0, 0.18));
-}
-
-.lgmp-control-quiet svg {
-  width: 46px;
-  height: 46px;
-}
-
-.lgmp-control-primary svg {
-  width: 78px;
-  height: 78px;
 }
 
 .lgmp-control:focus-visible {

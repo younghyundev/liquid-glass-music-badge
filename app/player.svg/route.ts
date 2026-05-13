@@ -1,12 +1,8 @@
-import { readFile } from "node:fs/promises";
-import { join } from "node:path";
 import { NextRequest } from "next/server";
 import { fetchYouTubeMetadata, metadataFromQuery } from "../../src/youtube.js";
 import { renderPlayerSvg } from "../../src/svg.js";
 
 export const runtime = "nodejs";
-
-const controlAssetsPromise = loadControlAssets();
 
 export async function GET(request: NextRequest) {
   const query = metadataFromQuery(request.nextUrl.searchParams);
@@ -19,25 +15,13 @@ export async function GET(request: NextRequest) {
   };
   const embeddedThumbnail = await fetchImageDataUri(metadata.thumbnail);
 
-  return new Response(renderPlayerSvg({ ...metadata, thumbnail: embeddedThumbnail }, { controls: await controlAssetsPromise }), {
+  return new Response(renderPlayerSvg({ ...metadata, thumbnail: embeddedThumbnail }), {
     status: 200,
     headers: {
       "content-type": "image/svg+xml; charset=utf-8",
       "cache-control": "public, max-age=300, stale-while-revalidate=3600"
     }
   });
-}
-
-async function loadControlAssets() {
-  const names = ["shuffle", "previous", "pause", "next", "repeat"];
-  const entries = await Promise.all(
-    names.map(async (name) => {
-      const data = await readFile(join(process.cwd(), "public", "assets", "controls", `${name}.png`));
-      return [name, `data:image/png;base64,${data.toString("base64")}`];
-    })
-  );
-
-  return Object.fromEntries(entries);
 }
 
 async function fetchImageDataUri(url?: string | null) {
