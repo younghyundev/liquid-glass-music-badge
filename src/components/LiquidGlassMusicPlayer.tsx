@@ -1,7 +1,7 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import LiquidGlass from "liquid-glass-react";
+import type { CSSProperties } from "react";
 import { boundedProgress, PLAYER_DEFAULTS, PLAYER_STYLE } from "../player-style";
 
 type LiquidGlassMusicPlayerProps = {
@@ -103,7 +103,12 @@ const playerStyleVars = {
   "--lgmp-artist-margin-top": `${PLAYER_STYLE.typography.artist.marginTop}px`,
   "--lgmp-time-size": `${PLAYER_STYLE.typography.time.size}px`,
   "--lgmp-time-weight": PLAYER_STYLE.typography.time.weight,
-  "--lgmp-progress-height": `${PLAYER_STYLE.progress.height}px`
+  "--lgmp-progress-height": `${PLAYER_STYLE.progress.height}px`,
+  "--lgmp-visualizer-width": `${PLAYER_STYLE.visualizer.width}px`,
+  "--lgmp-visualizer-height": `${PLAYER_STYLE.visualizer.height}px`,
+  "--lgmp-visualizer-bar-width": `${PLAYER_STYLE.visualizer.barWidth}px`,
+  "--lgmp-visualizer-gap": `${PLAYER_STYLE.visualizer.gap}px`,
+  "--lgmp-visualizer-radius": `${PLAYER_STYLE.visualizer.radius}px`
 } as CSSProperties;
 
 export default function LiquidGlassMusicPlayer({
@@ -115,21 +120,18 @@ export default function LiquidGlassMusicPlayer({
   albumArtUrl = ""
 }: LiquidGlassMusicPlayerProps) {
   const progressValue = boundedProgress(progress);
+  const { glass } = PLAYER_STYLE;
 
   return (
     <section className="lgmp-stage" aria-label="Liquid glass music player preview" style={playerStyleVars}>
       <LiquidGlass
         className="lgmp-liquidGlass"
-        displacementScale={58}
-        blurAmount={0.48}
-        saturation={165}
-        aberrationIntensity={2.4}
-        elasticity={0}
+        displacementScale={glass.displacementScale}
+        saturation={glass.saturation}
+        aberrationIntensity={glass.aberrationIntensity}
         cornerRadius={38}
         padding="0"
-        mode="prominent"
-        globalMousePos={{ x: 0, y: 0 }}
-        mouseOffset={{ x: 0, y: 0 }}
+        mode={glass.mode}
         style={{ position: "absolute", top: "50%", left: "50%" }}
       >
         <article className="lgmp-card">
@@ -147,7 +149,23 @@ export default function LiquidGlassMusicPlayer({
             </div>
 
             <div className="lgmp-trackMeta">
-              <h2>{title}</h2>
+              <div className="lgmp-titleRow">
+                <h2>{title}</h2>
+                <div className="lgmp-visualizer" aria-hidden="true">
+                  {PLAYER_STYLE.visualizer.heights.map((height, index) => (
+                    <span
+                      key={`${height}-${index}`}
+                      style={
+                        {
+                          "--lgmp-visualizer-bar-height": `${height}px`,
+                          "--lgmp-visualizer-duration": `${PLAYER_STYLE.visualizer.durations[index]}s`,
+                          "--lgmp-visualizer-delay": `${PLAYER_STYLE.visualizer.delays[index]}s`
+                        } as CSSProperties
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
               <p>{artist}</p>
             </div>
 

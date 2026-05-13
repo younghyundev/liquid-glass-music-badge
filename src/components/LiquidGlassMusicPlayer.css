@@ -24,6 +24,14 @@
   --lgmp-time-size: 30px;
   --lgmp-time-weight: 760;
   --lgmp-progress-height: 18px;
+  --lgmp-visualizer-width: 56px;
+  --lgmp-visualizer-height: 38px;
+  --lgmp-visualizer-bar-width: 6px;
+  --lgmp-visualizer-gap: 6px;
+  --lgmp-visualizer-radius: 3px;
+  --lgmp-visualizer-bar-height: 18px;
+  --lgmp-visualizer-duration: 0.56s;
+  --lgmp-visualizer-delay: 0s;
   --lgmp-control-svg-width: 70px;
   --lgmp-control-svg-height: 70px;
 }
@@ -186,6 +194,13 @@
   align-self: center;
 }
 
+.lgmp-titleRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--lgmp-visualizer-width);
+  gap: 22px;
+  align-items: center;
+}
+
 .lgmp-trackMeta h2 {
   margin: 0;
   max-width: 100%;
@@ -198,6 +213,26 @@
   text-overflow: ellipsis;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.28);
   white-space: nowrap;
+}
+
+.lgmp-visualizer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lgmp-visualizer-gap);
+  width: var(--lgmp-visualizer-width);
+  height: var(--lgmp-visualizer-height);
+  color: var(--lgmp-text);
+}
+
+.lgmp-visualizer span {
+  width: var(--lgmp-visualizer-bar-width);
+  height: var(--lgmp-visualizer-bar-height);
+  border-radius: var(--lgmp-visualizer-radius);
+  background: currentColor;
+  opacity: 0.92;
+  transform-origin: center;
+  animation: lgmp-visualizer-pulse var(--lgmp-visualizer-duration) ease-in-out var(--lgmp-visualizer-delay) infinite alternate;
 }
 
 .lgmp-trackMeta p {
@@ -433,5 +468,16 @@
   .lgmp-liquidGlass,
   .lgmp-liquidGlass * {
     transition: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes lgmp-visualizer-pulse {
+  from {
+    transform: scaleY(0.38);
+  }
+
+  to {
+    transform: scaleY(1);
   }
 }

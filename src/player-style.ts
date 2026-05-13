@@ -1,5 +1,6 @@
 export type ControlName = "shuffle" | "previous" | "pause" | "next" | "repeat";
 export type ControlTone = "quiet" | "standard" | "primary";
+export type GlassMode = "standard" | "polar" | "prominent" | "shader";
 
 export type ControlBox = {
   x: number;
@@ -18,6 +19,22 @@ export const PLAYER_DEFAULTS = {
 };
 
 export const PLAYER_STYLE = {
+  glass: {
+    displacementScale: 100,
+    saturation: 140,
+    aberrationIntensity: 2.4,
+    mode: "standard" as const
+  },
+  svgGlass: {
+    displacementScale: 18,
+    turbulenceBaseFrequency: "0.006 0.014",
+    turbulenceOctaves: 2,
+    turbulenceSeed: 12,
+    chromaticOffset: 2.4,
+    specularSurfaceScale: 7,
+    specularConstant: 0.62,
+    specularExponent: 28
+  },
   card: {
     width: 920,
     height: 424,
@@ -50,7 +67,7 @@ export const PLAYER_STYLE = {
       y: 119,
       clipX: 236,
       clipY: 66,
-      clipWidth: 622,
+      clipWidth: 544,
       clipHeight: 64,
       size: 44,
       weight: 730,
@@ -86,7 +103,19 @@ export const PLAYER_STYLE = {
     pause: { x: 422, y: 312, width: 78, height: 82, tone: "primary" },
     next: { x: 574, y: 313, width: 76, height: 80, tone: "standard" },
     repeat: { x: 804, y: 334, width: 46, height: 34, tone: "quiet" }
-  } satisfies Record<ControlName, ControlBox>
+  } satisfies Record<ControlName, ControlBox>,
+  visualizer: {
+    x: 802,
+    y: 84,
+    width: 56,
+    height: 38,
+    barWidth: 6,
+    gap: 6,
+    radius: 3,
+    heights: [12, 26, 18, 34, 16],
+    durations: [0.62, 0.48, 0.56, 0.72, 0.52],
+    delays: [0, 0.1, 0.04, 0.16, 0.08]
+  }
 };
 
 export function boundedProgress(value: unknown): number {
