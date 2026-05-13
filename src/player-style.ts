@@ -95,9 +95,9 @@ export const PLAYER_STYLE = {
   },
   controls: {
     shuffle: { x: 72, y: 334, width: 44, height: 34, tone: "quiet" },
-    previous: { x: 270, y: 313, width: 76, height: 80, tone: "standard" },
-    pause: { x: 422, y: 312, width: 78, height: 82, tone: "primary" },
-    next: { x: 574, y: 313, width: 76, height: 80, tone: "standard" },
+    previous: { x: 279, y: 323, width: 58, height: 61, tone: "standard" },
+    pause: { x: 434, y: 323, width: 53, height: 61, tone: "primary" },
+    next: { x: 583, y: 323, width: 58, height: 61, tone: "standard" },
     repeat: { x: 804, y: 334, width: 46, height: 34, tone: "quiet" }
   } satisfies Record<ControlName, ControlBox>,
   visualizer: {
