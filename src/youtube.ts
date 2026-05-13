@@ -1,10 +1,32 @@
 const OEMBED_ENDPOINT = "https://www.youtube.com/oembed";
+const YOUTUBE_ID_PATTERN = /^[a-zA-Z0-9_-]{11}$/;
 
-export function parseYouTubeVideoId(input) {
+export type YouTubeMetadata = {
+  ok: boolean;
+  title: string;
+  artist: string;
+  thumbnail: string | null;
+  videoId: string | null;
+};
+
+export type MetadataQuery = {
+  url: string;
+  videoId: string | null;
+  title: string;
+  artist: string;
+  theme: string;
+};
+
+type OEmbedResponse = {
+  title?: unknown;
+  author_name?: unknown;
+};
+
+export function parseYouTubeVideoId(input: unknown): string | null {
   if (!input || typeof input !== "string") return null;
 
   const trimmed = input.trim();
-  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+  if (YOUTUBE_ID_PATTERN.test(trimmed)) return trimmed;
 
   try {
     const url = new URL(trimmed);
@@ -12,19 +34,19 @@ export function parseYouTubeVideoId(input) {
 
     if (host === "youtu.be") {
       const id = url.pathname.split("/").filter(Boolean)[0];
-      return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+      return id && YOUTUBE_ID_PATTERN.test(id) ? id : null;
     }
 
     if (host === "youtube.com" || host === "m.youtube.com" || host === "music.youtube.com") {
       if (url.searchParams.has("v")) {
         const id = url.searchParams.get("v");
-        return /^[a-zA-Z0-9_-]{11}$/.test(id) ? id : null;
+        return id && YOUTUBE_ID_PATTERN.test(id) ? id : null;
       }
 
       const parts = url.pathname.split("/").filter(Boolean);
       const knownPrefixes = new Set(["embed", "shorts", "live"]);
-      if (knownPrefixes.has(parts[0]) && /^[a-zA-Z0-9_-]{11}$/.test(parts[1] || "")) {
-        return parts[1];
+      if (knownPrefixes.has(parts[0] || "") && YOUTUBE_ID_PATTERN.test(parts[1] || "")) {
+        return parts[1] || null;
       }
     }
   } catch {
@@ -34,16 +56,19 @@ export function parseYouTubeVideoId(input) {
   return null;
 }
 
-export function normalizeYouTubeUrl(input) {
+export function normalizeYouTubeUrl(input: unknown): string | null {
   const id = parseYouTubeVideoId(input);
   return id ? `https://www.youtube.com/watch?v=${id}` : null;
 }
 
-export function thumbnailUrl(videoId) {
+export function thumbnailUrl(videoId: string | null | undefined): string | null {
   return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 }
 
-export async function fetchYouTubeMetadata(input, fetchImpl = globalThis.fetch) {
+export async function fetchYouTubeMetadata(
+  input: unknown,
+  fetchImpl: typeof fetch | undefined = globalThis.fetch
+): Promise<YouTubeMetadata> {
   const normalized = normalizeYouTubeUrl(input);
   const videoId = parseYouTubeVideoId(input);
 
@@ -74,7 +99,7 @@ export async function fetchYouTubeMetadata(input, fetchImpl = globalThis.fetch) 
 
     if (!response.ok) return fallbackMetadata(videoId);
 
-    const data = await response.json();
+    const data = (await response.json()) as OEmbedResponse;
     return {
       ok: true,
       title: cleanText(data.title) || "YouTube Track",
@@ -89,7 +114,7 @@ export async function fetchYouTubeMetadata(input, fetchImpl = globalThis.fetch) 
   }
 }
 
-export function metadataFromQuery(searchParams) {
+export function metadataFromQuery(searchParams: URLSearchParams): MetadataQuery {
   const url = searchParams.get("url") || searchParams.get("youtube") || searchParams.get("v") || "";
   const videoId = parseYouTubeVideoId(url);
   return {
@@ -101,7 +126,7 @@ export function metadataFromQuery(searchParams) {
   };
 }
 
-function fallbackMetadata(videoId) {
+function fallbackMetadata(videoId: string): YouTubeMetadata {
   return {
     ok: false,
     title: "YouTube Track",
@@ -111,8 +136,7 @@ function fallbackMetadata(videoId) {
   };
 }
 
-function cleanText(value) {
+function cleanText(value: unknown): string {
   if (!value || typeof value !== "string") return "";
   return value.replace(/\s+/g, " ").trim().slice(0, 120);
 }
-

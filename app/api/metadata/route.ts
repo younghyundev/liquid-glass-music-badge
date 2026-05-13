@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { fetchYouTubeMetadata, metadataFromQuery } from "../../../src/youtube.js";
+import { fetchYouTubeMetadata, metadataFromQuery } from "../../../src/youtube";
 
 export const runtime = "nodejs";
 

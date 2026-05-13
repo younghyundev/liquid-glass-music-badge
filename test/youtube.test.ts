@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseYouTubeVideoId, normalizeYouTubeUrl, thumbnailUrl } from "../src/youtube.js";
+import { parseYouTubeVideoId, normalizeYouTubeUrl, thumbnailUrl } from "../src/youtube";
 
 test("parses common YouTube URL formats", () => {
   assert.equal(parseYouTubeVideoId("https://www.youtube.com/watch?v=dQw4w9WgXcQ"), "dQw4w9WgXcQ");
@@ -19,4 +19,3 @@ test("rejects invalid IDs", () => {
   assert.equal(parseYouTubeVideoId("https://example.com/watch?v=dQw4w9WgXcQ"), null);
   assert.equal(parseYouTubeVideoId("too-short"), null);
 });
-

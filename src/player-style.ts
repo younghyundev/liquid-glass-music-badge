@@ -1,3 +1,14 @@
+export type ControlName = "shuffle" | "previous" | "pause" | "next" | "repeat";
+export type ControlTone = "quiet" | "standard" | "primary";
+
+export type ControlBox = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  tone: ControlTone;
+};
+
 export const PLAYER_DEFAULTS = {
   title: "Birds of a Feather",
   artist: "Billie Eilish",
@@ -75,9 +86,9 @@ export const PLAYER_STYLE = {
     pause: { x: 422, y: 312, width: 78, height: 82, tone: "primary" },
     next: { x: 574, y: 313, width: 76, height: 80, tone: "standard" },
     repeat: { x: 804, y: 334, width: 46, height: 34, tone: "quiet" }
-  }
+  } satisfies Record<ControlName, ControlBox>
 };
 
-export function boundedProgress(value) {
+export function boundedProgress(value: unknown): number {
   return Math.min(100, Math.max(0, Number(value) || 0));
 }

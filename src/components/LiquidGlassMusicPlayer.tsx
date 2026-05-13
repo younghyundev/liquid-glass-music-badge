@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import LiquidGlass from "liquid-glass-react";
-import { boundedProgress, PLAYER_DEFAULTS, PLAYER_STYLE } from "../player-style.js";
+import { boundedProgress, PLAYER_DEFAULTS, PLAYER_STYLE } from "../player-style";
 
 type LiquidGlassMusicPlayerProps = {
   title?: string;
