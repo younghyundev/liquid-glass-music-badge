@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import "../src/components/LiquidGlassMusicPlayer.css";
 
 export const metadata: Metadata = {
   title: "Liquid Glass Music Badge",

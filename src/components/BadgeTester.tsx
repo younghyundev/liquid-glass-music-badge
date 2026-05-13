@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import GlassButton from "./GlassButton";
 
 const embedWidth = 920;
 
@@ -41,7 +42,7 @@ export default function BadgeTester() {
   }
 
   return (
-    <main className="shell" aria-labelledby="tester-title">
+    <div className="shell" aria-labelledby="tester-title">
       <section className="workspace">
         <form className="controls" aria-label="README SVG player tester" onSubmit={handleSubmit}>
           <p className="eyebrow">README image tester</p>
@@ -91,10 +92,18 @@ export default function BadgeTester() {
           </div>
 
           <div className="actions">
-            <button type="submit">Refresh preview</button>
-            <button className="secondary" type="button" onClick={copySnippet}>
+            <GlassButton type="submit" variant="primary" width={186} height={50} ariaLabel="Refresh preview">
+              Refresh preview
+            </GlassButton>
+            <GlassButton
+              variant="ghost"
+              width={170}
+              height={50}
+              onClick={copySnippet}
+              ariaLabel="Copy img tag"
+            >
               {copied ? "Copied" : "Copy img tag"}
-            </button>
+            </GlassButton>
           </div>
 
           <pre tabIndex={0} aria-live="polite">
@@ -106,6 +115,6 @@ export default function BadgeTester() {
           <img src={playerUrl} alt="Generated README liquid glass music player SVG preview" />
         </section>
       </section>
-    </main>
+    </div>
   );
 }

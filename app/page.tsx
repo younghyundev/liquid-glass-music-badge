@@ -1,11 +1,5 @@
-import BadgeTester from "../src/components/BadgeTester";
-import LiquidGlassMusicPlayer from "../src/components/LiquidGlassMusicPlayer";
+import LandingExperience from "../src/components/LandingExperience";
 
 export default function Home() {
-  return (
-    <>
-      <LiquidGlassMusicPlayer />
-      <BadgeTester />
-    </>
-  );
+  return <LandingExperience />;
 }
