@@ -1,4 +1,4 @@
-<img width="2172" height="724" alt="image" src="https://github.com/user-attachments/assets/6f33c4fe-187e-4fc3-aaf1-2b8e97d0face" />
+<img width="2400" height="800" alt="image" src="https://github.com/user-attachments/assets/c1a4adde-cb2f-49a0-aa1b-beac5c96af96" />
 
 # Liquid Glass Music Badge
 
