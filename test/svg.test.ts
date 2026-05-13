@@ -14,7 +14,7 @@ test("renders animated visualizer in README SVG output", () => {
   assert.equal(svg.match(/<animate attributeName="height"/g)?.length, 5);
 });
 
-test("renders liquid glass filter primitives in README SVG output", () => {
+test("renders clean liquid glass filter primitives in README SVG output", () => {
   const svg = renderPlayerSvg({
     title: "Birds of a Feather",
     artist: "Billie Eilish",
@@ -24,8 +24,9 @@ test("renders liquid glass filter primitives in README SVG output", () => {
   assert.match(svg, /id="liquidGlassDisplacement"/);
   assert.match(svg, /<feTurbulence/);
   assert.match(svg, /<feDisplacementMap/);
-  assert.match(svg, /id="liquidGlassSpecular"/);
-  assert.match(svg, /<feSpecularLighting/);
-  assert.match(svg, /id="liquidGlassChromatic"/);
+  assert.match(svg, /id="glassGlowTop"/);
+  assert.match(svg, /id="glassGlowBottom"/);
   assert.match(svg, /filter="url\(#liquidGlassDisplacement\)"/);
+  assert.doesNotMatch(svg, /<feSpecularLighting/);
+  assert.doesNotMatch(svg, /id="liquidGlassChromatic"/);
 });

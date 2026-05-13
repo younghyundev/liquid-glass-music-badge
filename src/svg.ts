@@ -58,6 +58,16 @@ function renderDefs(): string {
       <stop offset="56%" stop-color="#ffffff" stop-opacity="0.075"/>
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
+    <radialGradient id="glassGlowTop" cx="16%" cy="12%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="48%" stop-color="#ffffff" stop-opacity="0.045"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glassGlowBottom" cx="88%" cy="90%" r="68%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.09"/>
+      <stop offset="54%" stop-color="#ffffff" stop-opacity="0.03"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="progressFill" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0%" stop-color="${colors.progressFillStart}" stop-opacity="0.96"/>
       <stop offset="100%" stop-color="${colors.progressFillEnd}" stop-opacity="0.94"/>
@@ -73,26 +83,6 @@ function renderDefs(): string {
       <feTurbulence type="fractalNoise" baseFrequency="${svgGlass.turbulenceBaseFrequency}" numOctaves="${svgGlass.turbulenceOctaves}" seed="${svgGlass.turbulenceSeed}" result="liquidNoise"/>
       <feDisplacementMap in="SourceGraphic" in2="liquidNoise" scale="${svgGlass.displacementScale}" xChannelSelector="R" yChannelSelector="G" result="refractedGlass"/>
       <feColorMatrix in="refractedGlass" type="matrix" values="1.04 0 0 0 0  0 1.02 0 0 0  0 0 1.08 0 0  0 0 0 1 0"/>
-    </filter>
-    <filter id="liquidGlassSpecular" x="-8%" y="-14%" width="116%" height="128%" color-interpolation-filters="sRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.026" numOctaves="2" seed="${svgGlass.turbulenceSeed + 7}" result="specularNoise"/>
-      <feGaussianBlur in="specularNoise" stdDeviation="1.4" result="softSpecularNoise"/>
-      <feSpecularLighting in="softSpecularNoise" surfaceScale="${svgGlass.specularSurfaceScale}" specularConstant="${svgGlass.specularConstant}" specularExponent="${svgGlass.specularExponent}" lighting-color="#ffffff" result="specularLight">
-        <fePointLight x="-140" y="-90" z="230"/>
-      </feSpecularLighting>
-      <feComposite in="specularLight" in2="SourceAlpha" operator="in" result="clippedSpecular"/>
-      <feBlend in="SourceGraphic" in2="clippedSpecular" mode="screen"/>
-    </filter>
-    <filter id="liquidGlassChromatic" x="-8%" y="-18%" width="116%" height="136%" color-interpolation-filters="sRGB">
-      <feOffset in="SourceGraphic" dx="-${svgGlass.chromaticOffset}" dy="-0.35" result="redShift"/>
-      <feColorMatrix in="redShift" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .36 0" result="redEdge"/>
-      <feOffset in="SourceGraphic" dx="${svgGlass.chromaticOffset}" dy="0.55" result="blueShift"/>
-      <feColorMatrix in="blueShift" type="matrix" values="0 0 0 0 0  0 0.58 0 0 0  0 0 1 0 0  0 0 0 .28 0" result="blueEdge"/>
-      <feMerge>
-        <feMergeNode in="redEdge"/>
-        <feMergeNode in="blueEdge"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
     </filter>
     <filter id="iconShadow" x="-30%" y="-30%" width="160%" height="160%">
       <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.18"/>
@@ -120,17 +110,10 @@ function renderCardBackground(): string {
   return `<g filter="url(#liquidGlassDisplacement)">
         <rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="url(#cardGlass)"/>
         <rect x="-20" y="-22" width="${card.width + 40}" height="${card.height + 46}" fill="#ffffff" opacity=".045"/>
-        <path d="M-120 316C96 142 214 65 454 103c153 24 271 5 578-165v532H-120Z" fill="#ffffff" opacity=".045" filter="url(#surfaceBlur)"/>
+        <rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="url(#glassGlowTop)" opacity=".9"/>
+        <rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="url(#glassGlowBottom)" opacity=".85"/>
       </g>
-      <g filter="url(#liquidGlassSpecular)" opacity=".62">
-        <path d="M-76 138C134 62 314 57 511 91c170 29 310-7 485-98v143c-187 74-343 99-505 70-198-36-366-26-567 54Z" fill="#ffffff" opacity=".075"/>
-        <path d="M58 366C221 285 409 292 591 322c112 18 218 11 335-48v150H58Z" fill="#ffffff" opacity=".05"/>
-      </g>
-      <g filter="url(#liquidGlassChromatic)">
-        <rect x="-20" y="58" width="${card.width + 40}" height="84" fill="url(#specular)" opacity=".58" transform="rotate(-22 ${card.width / 2} 100)"/>
-        <path d="M22 32c98 46 214 58 344 37 164-27 298 4 425 85" fill="none" stroke="#ffffff" stroke-opacity=".18" stroke-width="2"/>
-        <path d="M760 18c-56 71-76 141-59 210 9 37 4 80-25 129" fill="none" stroke="#ffffff" stroke-opacity=".14" stroke-width="2"/>
-      </g>
+      <rect x="-20" y="58" width="${card.width + 40}" height="84" fill="url(#specular)" opacity=".44" transform="rotate(-22 ${card.width / 2} 100)"/>
       <rect x="1" y="1" width="${card.width - 2}" height="${card.height - 2}" rx="${card.radius - 1}" fill="none" stroke="url(#edgeLight)" stroke-width="2"/>
       <rect x="2.5" y="2.5" width="${card.width - 5}" height="${card.height - 5}" rx="${card.radius - 2.5}" fill="none" stroke="#ffffff" stroke-opacity=".09"/>`;
 }

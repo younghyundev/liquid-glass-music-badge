@@ -26,14 +26,10 @@ export const PLAYER_STYLE = {
     mode: "standard" as const
   },
   svgGlass: {
-    displacementScale: 18,
-    turbulenceBaseFrequency: "0.006 0.014",
-    turbulenceOctaves: 2,
-    turbulenceSeed: 12,
-    chromaticOffset: 2.4,
-    specularSurfaceScale: 7,
-    specularConstant: 0.62,
-    specularExponent: 28
+    displacementScale: 4,
+    turbulenceBaseFrequency: "0.002 0.005",
+    turbulenceOctaves: 1,
+    turbulenceSeed: 12
   },
   card: {
     width: 920,
