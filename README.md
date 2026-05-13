@@ -2,8 +2,7 @@
 
 # Liquid Glass Music Badge
 
-A README-embeddable liquid glass music badge generated from YouTube links. Built
-with Next.js, React, and TypeScript for straightforward Vercel deployment.
+A README-embeddable liquid glass music badge generated from YouTube links.
 
 The project serves a static SVG at `/player.svg`. Pass a YouTube URL, and the
 badge uses the video's thumbnail as the album cover. It also shows the fetched
@@ -20,14 +19,6 @@ so it works cleanly as a GitHub README `<img>` embed.
 <img src="https://liquid-glass-music-badge.vercel.app/player.svg?url=https%3A%2F%2Fyoutu.be%2F1JS5Td0MeNE%3Fsi%3DecOPZLccoV28Niip&v=2" alt="Liquid glass music badge" width="920" />
 ```
 
-## Site
-
-- `/` — interactive landing page introducing the badge with a live SVG showcase
-  (click chips to swap tracks) and concept-consistent liquid glass buttons
-  powered by [`liquid-glass-react`](https://github.com/rdev/liquid-glass-react).
-- `/try` — the generator form. Paste any YouTube URL, override title/artist,
-  copy the ready-to-paste `<img>` tag.
-
 ## Features
 
 - GitHub README-compatible SVG output
@@ -37,7 +28,6 @@ so it works cleanly as a GitHub README `<img>` embed.
   sections, and Apple-style refractive glass buttons
 - Live preview that fetches the actual `/player.svg` response — what you see is
   what GitHub fetches
-- Next.js route handlers for Vercel-friendly deployment
 
 ## Local Development
 
@@ -75,21 +65,6 @@ Example:
 ```text
 http://localhost:3000/player.svg?url=https%3A%2F%2Fyoutu.be%2FdQw4w9WgXcQ&title=Test%20Track&artist=Test%20Artist
 ```
-
-## Endpoints
-
-- `/` — interactive landing page with live showcase
-- `/try` — generator form (paste YouTube link, copy `<img>` snippet)
-- `/player.svg?url=...` — README-compatible static SVG
-- `/api/metadata?url=...` — metadata JSON for debugging
-
-## Notes
-
-GitHub README files cannot run JavaScript inside an image embed, so the README
-badge is intentionally rendered as a static SVG. The in-app landing page uses
-`liquid-glass-react` for interactive surfaces while the embedded SVG keeps the
-liquid glass look using pure SVG filters.
-
 Safari and Firefox only partially support the displacement effect on the
 landing page's `LiquidGlass` buttons; the SVG badge itself renders identically
 across browsers.
