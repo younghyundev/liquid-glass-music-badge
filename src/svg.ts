@@ -110,11 +110,7 @@ function renderDefs(): string {
 function renderCardBackground(): string {
   const { card } = PLAYER_STYLE;
 
-  // Opaque dark base so the badge looks identical on white or dark READMEs.
-  // The translucent glass gradients and highlights below layer on top of this
-  // surface rather than depending on whatever sits behind the <img>.
-  return `<rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="#15121a"/>
-      <g filter="url(#liquidGlassDisplacement)">
+  return `<g filter="url(#liquidGlassDisplacement)">
         <rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="url(#cardGlass)"/>
         <rect x="-20" y="-22" width="${card.width + 40}" height="${card.height + 46}" fill="#ffffff" opacity=".045"/>
         <rect width="${card.width}" height="${card.height}" rx="${card.radius}" fill="url(#glassGlowTop)" opacity=".9"/>
