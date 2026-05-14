@@ -57,7 +57,7 @@ export const PLAYER_STYLE = {
     radius: 20
   },
   typography: {
-    fontStack: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+    fontStack: 'Inter, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI", "Malgun Gothic", sans-serif',
     title: {
       x: 236,
       y: 119,

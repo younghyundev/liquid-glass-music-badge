@@ -1,4 +1,5 @@
 import { CONTROL_ICON_DATA_URIS } from "./control-icons";
+import { INTER_LATIN_WOFF2_DATA_URI } from "./embedded-fonts";
 import { PLAYER_DEFAULTS, PLAYER_STYLE, type ControlBox, type ControlName } from "./player-style";
 import { thumbnailUrl } from "./youtube";
 
@@ -98,6 +99,7 @@ function renderDefs(): string {
       <rect x="${typography.title.clipX}" y="${typography.title.clipY}" width="${typography.title.clipWidth}" height="${typography.title.clipHeight}"/>
     </clipPath>
     <style>
+      @font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: block; src: url("${INTER_LATIN_WOFF2_DATA_URI}") format("woff2"); }
       .title { font: ${typography.title.weight} ${typography.title.size}px ${typography.fontStack}; fill: ${colors.text}; letter-spacing: 0; }
       .artist { font: ${typography.artist.weight} ${typography.artist.size}px ${typography.fontStack}; fill: ${colors.muted}; letter-spacing: 0; }
       .time { font: ${typography.time.weight} ${typography.time.size}px ${typography.fontStack}; fill: ${colors.text}; letter-spacing: 0; }

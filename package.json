@@ -8,6 +8,7 @@
     "build": "next build",
     "dev": "next dev",
     "start": "next start",
+    "encode-fonts": "node scripts/encode-fonts.mjs",
     "encode-icons": "node scripts/encode-control-icons.mjs",
     "test": "tsc -p tsconfig.test.json && printf '{\"type\":\"commonjs\"}' > .tmp/test-dist/package.json && node --test .tmp/test-dist/test/*.test.js"
   },
